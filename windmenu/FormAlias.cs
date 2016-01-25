@@ -12,15 +12,34 @@ namespace windmenu
 {
     public partial class FormAlias : Form
     {
+        public string alias = "";
+        public string aliasTarget = "";
+        public bool created = false;
         public FormAlias()
         {
             InitializeComponent();
         }
-
+        
         private void buttonFindTarget_Click(object sender, EventArgs e)
         {
             openFileDialogTarget.ShowDialog();
             textBoxAliasTarget.Text = openFileDialogTarget.FileName;
+        }
+
+        private void buttonValidate_Click(object sender, EventArgs e)
+        {
+            alias = textBoxAlias.Text;
+            aliasTarget = textBoxAliasTarget.Text;
+            created = true;
+            Close();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            alias = "";
+            aliasTarget = "";
+            created = false;
+            Close();
         }
     }
 }

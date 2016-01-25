@@ -47,5 +47,15 @@ namespace windmenu
         {
             System.Diagnostics.Process.Start("https://github.com/psgarsenal/windmenu");
         }
+
+        private void buttonAliasesAdd_Click(object sender, EventArgs e)
+        {
+            FormAlias aliasesForm = new FormAlias();
+            aliasesForm.ShowDialog();
+            if (aliasesForm.created)
+            {
+                Program.aliases[Program.aliases.Length] = (aliasesForm.alias + ";" + aliasesForm.aliasTarget);
+            }
+        }
     }
 }
