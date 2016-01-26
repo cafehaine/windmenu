@@ -62,7 +62,9 @@
             this.Controls.Add(this.buttonSettings);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(460, 48);
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(460, 48);
             this.Name = "Form1";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
