@@ -66,6 +66,17 @@ namespace windmenu
             {
                 listBoxAliases.Items.Add(s);
             }
+            if (Program.colors.Count == 5)
+            {
+                // main
+                panelColorsDemo.BackColor = ColorTranslator.FromHtml(Program.colors[0]);
+                // textbox
+                textBoxColorDemo.BackColor = ColorTranslator.FromHtml(Program.colors[1]);
+                textBoxColorDemo.ForeColor = ColorTranslator.FromHtml(Program.colors[2]);
+                // button
+                buttonColorsDemo.BackColor = ColorTranslator.FromHtml(Program.colors[3]);
+                buttonColorsDemo.ForeColor = ColorTranslator.FromHtml(Program.colors[4]);
+            }
         }
 
         private void buttonAliasesRemove_Click(object sender, EventArgs e)
@@ -73,6 +84,46 @@ namespace windmenu
             string toRemove = listBoxAliases.Items[listBoxAliases.SelectedIndex].ToString();
             listBoxAliases.Items.Remove(toRemove);
             Program.aliases.Remove(toRemove);
+        }
+
+        private void buttonColorsBackground_Click(object sender, EventArgs e)
+        {
+            colorDialogColors.ShowDialog();
+            panelColorsDemo.BackColor = colorDialogColors.Color;
+        }
+
+        private void buttonColorsButtonBackground_Click(object sender, EventArgs e)
+        {
+            colorDialogColors.ShowDialog();
+            buttonColorsDemo.BackColor = colorDialogColors.Color;
+        }
+
+        private void buttonColorsButtonForeground_Click(object sender, EventArgs e)
+        {
+            colorDialogColors.ShowDialog();
+            buttonColorsDemo.ForeColor = colorDialogColors.Color;
+        }
+
+        private void buttonColorsTextBackground_Click(object sender, EventArgs e)
+        {
+            colorDialogColors.ShowDialog();
+            textBoxColorDemo.BackColor = colorDialogColors.Color;
+        }
+
+        private void buttonColorsTextForeground_Click(object sender, EventArgs e)
+        {
+            colorDialogColors.ShowDialog();
+            textBoxColorDemo.ForeColor = colorDialogColors.Color;
+        }
+
+        private void buttonColorsSave_Click(object sender, EventArgs e)
+        {
+            Program.colors.Clear();
+            Program.colors.Add(ColorTranslator.ToHtml(panelColorsDemo.BackColor));
+            Program.colors.Add(ColorTranslator.ToHtml(textBoxColorDemo.BackColor));
+            Program.colors.Add(ColorTranslator.ToHtml(textBoxColorDemo.ForeColor));
+            Program.colors.Add(ColorTranslator.ToHtml(buttonColorsDemo.BackColor));
+            Program.colors.Add(ColorTranslator.ToHtml(buttonColorsDemo.ForeColor));
         }
     }
 }

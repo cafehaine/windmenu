@@ -36,9 +36,22 @@
             this.buttonAliasesAdd = new System.Windows.Forms.Button();
             this.buttonAliasesRemove = new System.Windows.Forms.Button();
             this.tabPageColors = new System.Windows.Forms.TabPage();
+            this.buttonColorsTextForeground = new System.Windows.Forms.Button();
+            this.buttonColorsButtonBackground = new System.Windows.Forms.Button();
+            this.buttonColorsButtonForeground = new System.Windows.Forms.Button();
+            this.buttonColorsTextBackground = new System.Windows.Forms.Button();
+            this.buttonColorsBackground = new System.Windows.Forms.Button();
+            this.labelColorsPreview = new System.Windows.Forms.Label();
+            this.panelColorsDemo = new System.Windows.Forms.Panel();
+            this.textBoxColorDemo = new System.Windows.Forms.TextBox();
+            this.buttonColorsDemo = new System.Windows.Forms.Button();
             this.linkLabelGithub = new System.Windows.Forms.LinkLabel();
+            this.colorDialogColors = new System.Windows.Forms.ColorDialog();
+            this.buttonColorsSave = new System.Windows.Forms.Button();
             this.tabControlSettings.SuspendLayout();
             this.tabPageAliases.SuspendLayout();
+            this.tabPageColors.SuspendLayout();
+            this.panelColorsDemo.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonValidate
@@ -120,6 +133,14 @@
             // 
             // tabPageColors
             // 
+            this.tabPageColors.Controls.Add(this.buttonColorsSave);
+            this.tabPageColors.Controls.Add(this.buttonColorsTextForeground);
+            this.tabPageColors.Controls.Add(this.buttonColorsButtonBackground);
+            this.tabPageColors.Controls.Add(this.buttonColorsButtonForeground);
+            this.tabPageColors.Controls.Add(this.buttonColorsTextBackground);
+            this.tabPageColors.Controls.Add(this.buttonColorsBackground);
+            this.tabPageColors.Controls.Add(this.labelColorsPreview);
+            this.tabPageColors.Controls.Add(this.panelColorsDemo);
             this.tabPageColors.Location = new System.Drawing.Point(4, 22);
             this.tabPageColors.Name = "tabPageColors";
             this.tabPageColors.Padding = new System.Windows.Forms.Padding(3);
@@ -128,16 +149,118 @@
             this.tabPageColors.Text = "Colors";
             this.tabPageColors.UseVisualStyleBackColor = true;
             // 
+            // buttonColorsTextForeground
+            // 
+            this.buttonColorsTextForeground.Location = new System.Drawing.Point(87, 35);
+            this.buttonColorsTextForeground.Name = "buttonColorsTextForeground";
+            this.buttonColorsTextForeground.Size = new System.Drawing.Size(78, 23);
+            this.buttonColorsTextForeground.TabIndex = 6;
+            this.buttonColorsTextForeground.Text = "Text Fore";
+            this.buttonColorsTextForeground.UseVisualStyleBackColor = true;
+            this.buttonColorsTextForeground.Click += new System.EventHandler(this.buttonColorsTextForeground_Click);
+            // 
+            // buttonColorsButtonBackground
+            // 
+            this.buttonColorsButtonBackground.Location = new System.Drawing.Point(87, 6);
+            this.buttonColorsButtonBackground.Name = "buttonColorsButtonBackground";
+            this.buttonColorsButtonBackground.Size = new System.Drawing.Size(78, 23);
+            this.buttonColorsButtonBackground.TabIndex = 5;
+            this.buttonColorsButtonBackground.Text = "Button Back";
+            this.buttonColorsButtonBackground.UseVisualStyleBackColor = true;
+            this.buttonColorsButtonBackground.Click += new System.EventHandler(this.buttonColorsButtonBackground_Click);
+            // 
+            // buttonColorsButtonForeground
+            // 
+            this.buttonColorsButtonForeground.Location = new System.Drawing.Point(171, 6);
+            this.buttonColorsButtonForeground.Name = "buttonColorsButtonForeground";
+            this.buttonColorsButtonForeground.Size = new System.Drawing.Size(75, 23);
+            this.buttonColorsButtonForeground.TabIndex = 4;
+            this.buttonColorsButtonForeground.Text = "Button Fore";
+            this.buttonColorsButtonForeground.UseVisualStyleBackColor = true;
+            this.buttonColorsButtonForeground.Click += new System.EventHandler(this.buttonColorsButtonForeground_Click);
+            // 
+            // buttonColorsTextBackground
+            // 
+            this.buttonColorsTextBackground.Location = new System.Drawing.Point(6, 35);
+            this.buttonColorsTextBackground.Name = "buttonColorsTextBackground";
+            this.buttonColorsTextBackground.Size = new System.Drawing.Size(75, 23);
+            this.buttonColorsTextBackground.TabIndex = 3;
+            this.buttonColorsTextBackground.Text = "Text Back";
+            this.buttonColorsTextBackground.UseVisualStyleBackColor = true;
+            this.buttonColorsTextBackground.Click += new System.EventHandler(this.buttonColorsTextBackground_Click);
+            // 
+            // buttonColorsBackground
+            // 
+            this.buttonColorsBackground.Location = new System.Drawing.Point(6, 6);
+            this.buttonColorsBackground.Name = "buttonColorsBackground";
+            this.buttonColorsBackground.Size = new System.Drawing.Size(75, 23);
+            this.buttonColorsBackground.TabIndex = 2;
+            this.buttonColorsBackground.Text = "Background";
+            this.buttonColorsBackground.UseVisualStyleBackColor = true;
+            this.buttonColorsBackground.Click += new System.EventHandler(this.buttonColorsBackground_Click);
+            // 
+            // labelColorsPreview
+            // 
+            this.labelColorsPreview.AutoSize = true;
+            this.labelColorsPreview.Location = new System.Drawing.Point(7, 129);
+            this.labelColorsPreview.Name = "labelColorsPreview";
+            this.labelColorsPreview.Size = new System.Drawing.Size(48, 13);
+            this.labelColorsPreview.TabIndex = 1;
+            this.labelColorsPreview.Text = "Preview:";
+            // 
+            // panelColorsDemo
+            // 
+            this.panelColorsDemo.Controls.Add(this.textBoxColorDemo);
+            this.panelColorsDemo.Controls.Add(this.buttonColorsDemo);
+            this.panelColorsDemo.Location = new System.Drawing.Point(6, 145);
+            this.panelColorsDemo.Name = "panelColorsDemo";
+            this.panelColorsDemo.Size = new System.Drawing.Size(240, 31);
+            this.panelColorsDemo.TabIndex = 0;
+            // 
+            // textBoxColorDemo
+            // 
+            this.textBoxColorDemo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxColorDemo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxColorDemo.Location = new System.Drawing.Point(84, 8);
+            this.textBoxColorDemo.Name = "textBoxColorDemo";
+            this.textBoxColorDemo.Size = new System.Drawing.Size(153, 13);
+            this.textBoxColorDemo.TabIndex = 1;
+            this.textBoxColorDemo.Text = "Demo Text";
+            // 
+            // buttonColorsDemo
+            // 
+            this.buttonColorsDemo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonColorsDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColorsDemo.Location = new System.Drawing.Point(3, 3);
+            this.buttonColorsDemo.Name = "buttonColorsDemo";
+            this.buttonColorsDemo.Size = new System.Drawing.Size(75, 25);
+            this.buttonColorsDemo.TabIndex = 0;
+            this.buttonColorsDemo.Text = "Settings";
+            this.buttonColorsDemo.UseVisualStyleBackColor = true;
+            // 
             // linkLabelGithub
             // 
             this.linkLabelGithub.AutoSize = true;
-            this.linkLabelGithub.Location = new System.Drawing.Point(12, 239);
+            this.linkLabelGithub.Location = new System.Drawing.Point(19, 231);
             this.linkLabelGithub.Name = "linkLabelGithub";
             this.linkLabelGithub.Size = new System.Drawing.Size(38, 13);
             this.linkLabelGithub.TabIndex = 4;
             this.linkLabelGithub.TabStop = true;
             this.linkLabelGithub.Text = "Github";
             this.linkLabelGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGithub_LinkClicked);
+            // 
+            // buttonColorsSave
+            // 
+            this.buttonColorsSave.Location = new System.Drawing.Point(10, 88);
+            this.buttonColorsSave.Name = "buttonColorsSave";
+            this.buttonColorsSave.Size = new System.Drawing.Size(233, 23);
+            this.buttonColorsSave.TabIndex = 7;
+            this.buttonColorsSave.Text = "Save colors";
+            this.buttonColorsSave.UseVisualStyleBackColor = true;
+            this.buttonColorsSave.Click += new System.EventHandler(this.buttonColorsSave_Click);
             // 
             // FormSettings
             // 
@@ -161,6 +284,10 @@
             this.Load += new System.EventHandler(this.FormSettings_Load);
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageAliases.ResumeLayout(false);
+            this.tabPageColors.ResumeLayout(false);
+            this.tabPageColors.PerformLayout();
+            this.panelColorsDemo.ResumeLayout(false);
+            this.panelColorsDemo.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -176,5 +303,16 @@
         private System.Windows.Forms.Button buttonAliasesAdd;
         private System.Windows.Forms.Button buttonAliasesRemove;
         private System.Windows.Forms.LinkLabel linkLabelGithub;
+        private System.Windows.Forms.Button buttonColorsTextForeground;
+        private System.Windows.Forms.Button buttonColorsButtonBackground;
+        private System.Windows.Forms.Button buttonColorsButtonForeground;
+        private System.Windows.Forms.Button buttonColorsTextBackground;
+        private System.Windows.Forms.Button buttonColorsBackground;
+        private System.Windows.Forms.Label labelColorsPreview;
+        private System.Windows.Forms.Panel panelColorsDemo;
+        private System.Windows.Forms.TextBox textBoxColorDemo;
+        private System.Windows.Forms.Button buttonColorsDemo;
+        private System.Windows.Forms.ColorDialog colorDialogColors;
+        private System.Windows.Forms.Button buttonColorsSave;
     }
 }
