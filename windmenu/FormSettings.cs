@@ -13,6 +13,7 @@ namespace windmenu
 {
     public partial class FormSettings : Form
     {
+        static public string systemPath;
         public FormSettings()
         {
             InitializeComponent();
@@ -31,7 +32,7 @@ namespace windmenu
             {
                 output += s + ";";
             }
-            return output.Substring(0,output.Length -1);
+            return output.Substring(0, output.Length - 1);
         }
         private void save()
         {
@@ -81,12 +82,11 @@ namespace windmenu
                 buttonColorsDemo.ForeColor = ColorTranslator.FromHtml(Program.colors[4]);
             }
             // PATH TAB
-            string keyName = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment\";
-            string pathVar = (string)Registry.LocalMachine.OpenSubKey(keyName).GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
+            systemPath = (string)Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment\").GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
             listBoxPath.Items.Clear();
-            listBoxPath.Items.AddRange(pathVar.Split(';'));
+            listBoxPath.Items.AddRange(systemPath.Split(';'));
         } // setting the values of some lists
-        #region Color buttons
+
         private void buttonAliasesRemove_Click(object sender, EventArgs e)
         {
             if (listBoxAliases.SelectedIndex != -1)
@@ -97,6 +97,7 @@ namespace windmenu
             }
         }
 
+        #region Color buttons
         private void buttonColorsBackground_Click(object sender, EventArgs e)
         {
             colorDialogColors.ShowDialog();
@@ -137,5 +138,29 @@ namespace windmenu
             Program.colors.Add(ColorTranslator.ToHtml(buttonColorsDemo.ForeColor));
         }
         #endregion
+
+        private void buttonPathRemove_Click(object sender, EventArgs e)
+        {
+            if (listBoxPath.SelectedIndex != -1)
+            {
+                string toRemove = listBoxPath.Items[listBoxPath.SelectedIndex].ToString();
+                listBoxPath.Items.Remove(toRemove);
+            }
+        }
+
+        private void buttonPathAdd_Click(object sender, EventArgs e)
+        {
+            FormPath pathForm = new FormPath();
+            pathForm.ShowDialog();
+            if (pathForm.isSetPath)
+            {
+                listBoxPath.Items.Add(pathForm.path);
+            }
+        }
+
+        private void buttonPathSave_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

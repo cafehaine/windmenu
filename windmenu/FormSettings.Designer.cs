@@ -47,12 +47,13 @@
             this.textBoxColorDemo = new System.Windows.Forms.TextBox();
             this.buttonColorsDemo = new System.Windows.Forms.Button();
             this.tabPagePath = new System.Windows.Forms.TabPage();
+            this.buttonPathSave = new System.Windows.Forms.Button();
+            this.labelPathWarning = new System.Windows.Forms.Label();
             this.listBoxPath = new System.Windows.Forms.ListBox();
             this.buttonPathRemove = new System.Windows.Forms.Button();
             this.buttonPathAdd = new System.Windows.Forms.Button();
             this.linkLabelGithub = new System.Windows.Forms.LinkLabel();
             this.colorDialogColors = new System.Windows.Forms.ColorDialog();
-            this.labelPathWarning = new System.Windows.Forms.Label();
             this.tabControlSettings.SuspendLayout();
             this.tabPageAliases.SuspendLayout();
             this.tabPageColors.SuspendLayout();
@@ -260,6 +261,7 @@
             // 
             // tabPagePath
             // 
+            this.tabPagePath.Controls.Add(this.buttonPathSave);
             this.tabPagePath.Controls.Add(this.labelPathWarning);
             this.tabPagePath.Controls.Add(this.listBoxPath);
             this.tabPagePath.Controls.Add(this.buttonPathRemove);
@@ -270,6 +272,28 @@
             this.tabPagePath.TabIndex = 2;
             this.tabPagePath.Text = "Path editor";
             this.tabPagePath.UseVisualStyleBackColor = true;
+            // 
+            // buttonPathSave
+            // 
+            this.buttonPathSave.Location = new System.Drawing.Point(3, 156);
+            this.buttonPathSave.Name = "buttonPathSave";
+            this.buttonPathSave.Size = new System.Drawing.Size(87, 23);
+            this.buttonPathSave.TabIndex = 4;
+            this.buttonPathSave.Text = "Save path";
+            this.buttonPathSave.UseVisualStyleBackColor = true;
+            this.buttonPathSave.Click += new System.EventHandler(this.buttonPathSave_Click);
+            // 
+            // labelPathWarning
+            // 
+            this.labelPathWarning.AutoSize = true;
+            this.labelPathWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPathWarning.ForeColor = System.Drawing.Color.DarkRed;
+            this.labelPathWarning.Location = new System.Drawing.Point(3, 0);
+            this.labelPathWarning.Name = "labelPathWarning";
+            this.labelPathWarning.Size = new System.Drawing.Size(339, 60);
+            this.labelPathWarning.TabIndex = 3;
+            this.labelPathWarning.Text = "CHANGING YOUR USER PATH CAN BE REALLY\r\nDANGEROUS, PLEASE BE CAREFUL WITH WHAT\r\nYO" +
+    "U ARE DOING HERE. DON\'T BLAME ME IF YOUR\r\nCOMPUTER STOPS WORKING.";
             // 
             // listBoxPath
             // 
@@ -287,6 +311,7 @@
             this.buttonPathRemove.TabIndex = 1;
             this.buttonPathRemove.Text = "Remove selected path";
             this.buttonPathRemove.UseVisualStyleBackColor = true;
+            this.buttonPathRemove.Click += new System.EventHandler(this.buttonPathRemove_Click);
             // 
             // buttonPathAdd
             // 
@@ -296,6 +321,7 @@
             this.buttonPathAdd.TabIndex = 0;
             this.buttonPathAdd.Text = "Add folder to path";
             this.buttonPathAdd.UseVisualStyleBackColor = true;
+            this.buttonPathAdd.Click += new System.EventHandler(this.buttonPathAdd_Click);
             // 
             // linkLabelGithub
             // 
@@ -307,18 +333,6 @@
             this.linkLabelGithub.TabStop = true;
             this.linkLabelGithub.Text = "Github";
             this.linkLabelGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGithub_LinkClicked);
-            // 
-            // labelPathWarning
-            // 
-            this.labelPathWarning.AutoSize = true;
-            this.labelPathWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPathWarning.ForeColor = System.Drawing.Color.DarkRed;
-            this.labelPathWarning.Location = new System.Drawing.Point(3, 0);
-            this.labelPathWarning.Name = "labelPathWarning";
-            this.labelPathWarning.Size = new System.Drawing.Size(339, 60);
-            this.labelPathWarning.TabIndex = 3;
-            this.labelPathWarning.Text = "CHANGING YOUR USER PATH CAN BE REALLY\r\nDANGEROUS, PLEASE BE CAREFULL WITH WHAT\r\nY" +
-    "OU ARE DOING HERE. DON\'T BLAME ME IF YOUR\r\nCOMPUTER STOPS WORKING.";
             // 
             // FormSettings
             // 
@@ -379,5 +393,6 @@
         private System.Windows.Forms.Button buttonPathRemove;
         private System.Windows.Forms.Button buttonPathAdd;
         private System.Windows.Forms.Label labelPathWarning;
+        private System.Windows.Forms.Button buttonPathSave;
     }
 }

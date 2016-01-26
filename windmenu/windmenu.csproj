@@ -58,6 +58,12 @@
     <Compile Include="FormAlias.Designer.cs">
       <DependentUpon>FormAlias.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPath.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPath.Designer.cs">
+      <DependentUpon>FormPath.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormAlias.resx">
       <DependentUpon>FormAlias.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPath.resx">
+      <DependentUpon>FormPath.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSettings.resx">
       <DependentUpon>FormSettings.cs</DependentUpon>
