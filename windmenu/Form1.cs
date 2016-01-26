@@ -70,7 +70,7 @@ namespace windmenu
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if (Program.colors.Length == 5)
+            if (Program.colors.Count == 5)
             {
                 // main
                 BackColor = ColorTranslator.FromHtml(Program.colors[0]);

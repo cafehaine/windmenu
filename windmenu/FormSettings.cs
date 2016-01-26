@@ -23,7 +23,7 @@ namespace windmenu
             this.Close();
         }
 
-        private string joinSettings(string[] input)
+        private string joinSettings(List<string> input)
         {
             string output = "";
             foreach (string s in input)
@@ -54,8 +54,25 @@ namespace windmenu
             aliasesForm.ShowDialog();
             if (aliasesForm.created)
             {
-                Program.aliases[Program.aliases.Length] = (aliasesForm.alias + ";" + aliasesForm.aliasTarget);
+                Program.aliases.Add(aliasesForm.alias + "=\"" + aliasesForm.aliasTarget + "\"");
+                listBoxAliases.Items.Add(aliasesForm.alias + "=\"" + aliasesForm.aliasTarget + "\"");
             }
+        }
+
+        private void FormSettings_Load(object sender, EventArgs e)
+        {
+            listBoxAliases.Items.Clear();
+            foreach (string s in Program.aliases)
+            {
+                listBoxAliases.Items.Add(s);
+            }
+        }
+
+        private void buttonAliasesRemove_Click(object sender, EventArgs e)
+        {
+            string toRemove = listBoxAliases.Items[listBoxAliases.SelectedIndex].ToString();
+            listBoxAliases.Items.Remove(toRemove);
+            Program.aliases.Remove(toRemove);
         }
     }
 }

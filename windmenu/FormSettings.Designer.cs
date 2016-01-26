@@ -32,10 +32,10 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControlSettings = new System.Windows.Forms.TabControl();
             this.tabPageAliases = new System.Windows.Forms.TabPage();
-            this.tabPageColors = new System.Windows.Forms.TabPage();
-            this.buttonAliasesRemove = new System.Windows.Forms.Button();
-            this.buttonAliasesAdd = new System.Windows.Forms.Button();
             this.listBoxAliases = new System.Windows.Forms.ListBox();
+            this.buttonAliasesAdd = new System.Windows.Forms.Button();
+            this.buttonAliasesRemove = new System.Windows.Forms.Button();
+            this.tabPageColors = new System.Windows.Forms.TabPage();
             this.linkLabelGithub = new System.Windows.Forms.LinkLabel();
             this.tabControlSettings.SuspendLayout();
             this.tabPageAliases.SuspendLayout();
@@ -88,34 +88,6 @@
             this.tabPageAliases.Text = "Aliases";
             this.tabPageAliases.UseVisualStyleBackColor = true;
             // 
-            // tabPageColors
-            // 
-            this.tabPageColors.Location = new System.Drawing.Point(4, 22);
-            this.tabPageColors.Name = "tabPageColors";
-            this.tabPageColors.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageColors.Size = new System.Drawing.Size(252, 182);
-            this.tabPageColors.TabIndex = 1;
-            this.tabPageColors.Text = "Colors";
-            this.tabPageColors.UseVisualStyleBackColor = true;
-            // 
-            // buttonAliasesRemove
-            // 
-            this.buttonAliasesRemove.Location = new System.Drawing.Point(59, 153);
-            this.buttonAliasesRemove.Name = "buttonAliasesRemove";
-            this.buttonAliasesRemove.Size = new System.Drawing.Size(106, 23);
-            this.buttonAliasesRemove.TabIndex = 0;
-            this.buttonAliasesRemove.Text = "Remove selected";
-            this.buttonAliasesRemove.UseVisualStyleBackColor = true;
-            // 
-            // buttonAliasesAdd
-            // 
-            this.buttonAliasesAdd.Location = new System.Drawing.Point(171, 153);
-            this.buttonAliasesAdd.Name = "buttonAliasesAdd";
-            this.buttonAliasesAdd.Size = new System.Drawing.Size(75, 23);
-            this.buttonAliasesAdd.TabIndex = 1;
-            this.buttonAliasesAdd.Text = "Add alias";
-            this.buttonAliasesAdd.UseVisualStyleBackColor = true;
-            // 
             // listBoxAliases
             // 
             this.listBoxAliases.FormattingEnabled = true;
@@ -125,6 +97,36 @@
             this.listBoxAliases.Name = "listBoxAliases";
             this.listBoxAliases.Size = new System.Drawing.Size(240, 134);
             this.listBoxAliases.TabIndex = 2;
+            // 
+            // buttonAliasesAdd
+            // 
+            this.buttonAliasesAdd.Location = new System.Drawing.Point(171, 153);
+            this.buttonAliasesAdd.Name = "buttonAliasesAdd";
+            this.buttonAliasesAdd.Size = new System.Drawing.Size(75, 23);
+            this.buttonAliasesAdd.TabIndex = 1;
+            this.buttonAliasesAdd.Text = "Add alias";
+            this.buttonAliasesAdd.UseVisualStyleBackColor = true;
+            this.buttonAliasesAdd.Click += new System.EventHandler(this.buttonAliasesAdd_Click);
+            // 
+            // buttonAliasesRemove
+            // 
+            this.buttonAliasesRemove.Location = new System.Drawing.Point(59, 153);
+            this.buttonAliasesRemove.Name = "buttonAliasesRemove";
+            this.buttonAliasesRemove.Size = new System.Drawing.Size(106, 23);
+            this.buttonAliasesRemove.TabIndex = 0;
+            this.buttonAliasesRemove.Text = "Remove selected";
+            this.buttonAliasesRemove.UseVisualStyleBackColor = true;
+            this.buttonAliasesRemove.Click += new System.EventHandler(this.buttonAliasesRemove_Click);
+            // 
+            // tabPageColors
+            // 
+            this.tabPageColors.Location = new System.Drawing.Point(4, 22);
+            this.tabPageColors.Name = "tabPageColors";
+            this.tabPageColors.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageColors.Size = new System.Drawing.Size(252, 182);
+            this.tabPageColors.TabIndex = 1;
+            this.tabPageColors.Text = "Colors";
+            this.tabPageColors.UseVisualStyleBackColor = true;
             // 
             // linkLabelGithub
             // 
@@ -156,6 +158,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.FormSettings_Load);
             this.tabControlSettings.ResumeLayout(false);
             this.tabPageAliases.ResumeLayout(false);
             this.ResumeLayout(false);

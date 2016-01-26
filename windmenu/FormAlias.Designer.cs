@@ -83,6 +83,7 @@
             this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonValidate
             // 
@@ -93,6 +94,7 @@
             this.buttonValidate.TabIndex = 5;
             this.buttonValidate.Text = "Add alias";
             this.buttonValidate.UseVisualStyleBackColor = true;
+            this.buttonValidate.Click += new System.EventHandler(this.buttonValidate_Click);
             // 
             // buttonFindTarget
             // 
