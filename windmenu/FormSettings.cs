@@ -81,9 +81,12 @@ namespace windmenu
 
         private void buttonAliasesRemove_Click(object sender, EventArgs e)
         {
-            string toRemove = listBoxAliases.Items[listBoxAliases.SelectedIndex].ToString();
-            listBoxAliases.Items.Remove(toRemove);
-            Program.aliases.Remove(toRemove);
+            if (listBoxAliases.SelectedIndex != -1)
+            {
+                string toRemove = listBoxAliases.Items[listBoxAliases.SelectedIndex].ToString();
+                listBoxAliases.Items.Remove(toRemove);
+                Program.aliases.Remove(toRemove);
+            }
         }
 
         private void buttonColorsBackground_Click(object sender, EventArgs e)
