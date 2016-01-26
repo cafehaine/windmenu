@@ -1,0 +1,4 @@
+# ignore Visual Studio directories
+.vs/
+windmenu/bin/
+windmenu/obj/
