@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32; // for registry reading
 
 namespace windmenu
 {
@@ -61,11 +62,13 @@ namespace windmenu
 
         private void FormSettings_Load(object sender, EventArgs e)
         {
+            // ALIAS TAB
             listBoxAliases.Items.Clear();
             foreach (string s in Program.aliases)
             {
                 listBoxAliases.Items.Add(s);
             }
+            // COLOR TAB
             if (Program.colors.Count == 5)
             {
                 // main
@@ -77,8 +80,13 @@ namespace windmenu
                 buttonColorsDemo.BackColor = ColorTranslator.FromHtml(Program.colors[3]);
                 buttonColorsDemo.ForeColor = ColorTranslator.FromHtml(Program.colors[4]);
             }
-        }
-
+            // PATH TAB
+            string keyName = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment\";
+            string pathVar = (string)Registry.LocalMachine.OpenSubKey(keyName).GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
+            listBoxPath.Items.Clear();
+            listBoxPath.Items.AddRange(pathVar.Split(';'));
+        } // setting the values of some lists
+        #region Color buttons
         private void buttonAliasesRemove_Click(object sender, EventArgs e)
         {
             if (listBoxAliases.SelectedIndex != -1)
@@ -128,5 +136,6 @@ namespace windmenu
             Program.colors.Add(ColorTranslator.ToHtml(buttonColorsDemo.BackColor));
             Program.colors.Add(ColorTranslator.ToHtml(buttonColorsDemo.ForeColor));
         }
+        #endregion
     }
 }

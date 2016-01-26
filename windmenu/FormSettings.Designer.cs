@@ -36,6 +36,7 @@
             this.buttonAliasesAdd = new System.Windows.Forms.Button();
             this.buttonAliasesRemove = new System.Windows.Forms.Button();
             this.tabPageColors = new System.Windows.Forms.TabPage();
+            this.buttonColorsSave = new System.Windows.Forms.Button();
             this.buttonColorsTextForeground = new System.Windows.Forms.Button();
             this.buttonColorsButtonBackground = new System.Windows.Forms.Button();
             this.buttonColorsButtonForeground = new System.Windows.Forms.Button();
@@ -45,18 +46,23 @@
             this.panelColorsDemo = new System.Windows.Forms.Panel();
             this.textBoxColorDemo = new System.Windows.Forms.TextBox();
             this.buttonColorsDemo = new System.Windows.Forms.Button();
+            this.tabPagePath = new System.Windows.Forms.TabPage();
+            this.listBoxPath = new System.Windows.Forms.ListBox();
+            this.buttonPathRemove = new System.Windows.Forms.Button();
+            this.buttonPathAdd = new System.Windows.Forms.Button();
             this.linkLabelGithub = new System.Windows.Forms.LinkLabel();
             this.colorDialogColors = new System.Windows.Forms.ColorDialog();
-            this.buttonColorsSave = new System.Windows.Forms.Button();
+            this.labelPathWarning = new System.Windows.Forms.Label();
             this.tabControlSettings.SuspendLayout();
             this.tabPageAliases.SuspendLayout();
             this.tabPageColors.SuspendLayout();
             this.panelColorsDemo.SuspendLayout();
+            this.tabPagePath.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonValidate
             // 
-            this.buttonValidate.Location = new System.Drawing.Point(197, 226);
+            this.buttonValidate.Location = new System.Drawing.Point(290, 226);
             this.buttonValidate.Name = "buttonValidate";
             this.buttonValidate.Size = new System.Drawing.Size(75, 23);
             this.buttonValidate.TabIndex = 1;
@@ -67,7 +73,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(116, 226);
+            this.buttonCancel.Location = new System.Drawing.Point(209, 226);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -82,10 +88,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlSettings.Controls.Add(this.tabPageAliases);
             this.tabControlSettings.Controls.Add(this.tabPageColors);
+            this.tabControlSettings.Controls.Add(this.tabPagePath);
             this.tabControlSettings.Location = new System.Drawing.Point(12, 12);
             this.tabControlSettings.Name = "tabControlSettings";
             this.tabControlSettings.SelectedIndex = 0;
-            this.tabControlSettings.Size = new System.Drawing.Size(260, 208);
+            this.tabControlSettings.Size = new System.Drawing.Size(353, 208);
             this.tabControlSettings.TabIndex = 3;
             // 
             // tabPageAliases
@@ -96,7 +103,7 @@
             this.tabPageAliases.Location = new System.Drawing.Point(4, 22);
             this.tabPageAliases.Name = "tabPageAliases";
             this.tabPageAliases.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAliases.Size = new System.Drawing.Size(252, 182);
+            this.tabPageAliases.Size = new System.Drawing.Size(345, 182);
             this.tabPageAliases.TabIndex = 0;
             this.tabPageAliases.Text = "Aliases";
             this.tabPageAliases.UseVisualStyleBackColor = true;
@@ -106,14 +113,14 @@
             this.listBoxAliases.FormattingEnabled = true;
             this.listBoxAliases.Items.AddRange(new object[] {
             " "});
-            this.listBoxAliases.Location = new System.Drawing.Point(6, 6);
+            this.listBoxAliases.Location = new System.Drawing.Point(3, 3);
             this.listBoxAliases.Name = "listBoxAliases";
-            this.listBoxAliases.Size = new System.Drawing.Size(240, 134);
+            this.listBoxAliases.Size = new System.Drawing.Size(336, 147);
             this.listBoxAliases.TabIndex = 2;
             // 
             // buttonAliasesAdd
             // 
-            this.buttonAliasesAdd.Location = new System.Drawing.Point(171, 153);
+            this.buttonAliasesAdd.Location = new System.Drawing.Point(264, 156);
             this.buttonAliasesAdd.Name = "buttonAliasesAdd";
             this.buttonAliasesAdd.Size = new System.Drawing.Size(75, 23);
             this.buttonAliasesAdd.TabIndex = 1;
@@ -123,7 +130,7 @@
             // 
             // buttonAliasesRemove
             // 
-            this.buttonAliasesRemove.Location = new System.Drawing.Point(59, 153);
+            this.buttonAliasesRemove.Location = new System.Drawing.Point(152, 156);
             this.buttonAliasesRemove.Name = "buttonAliasesRemove";
             this.buttonAliasesRemove.Size = new System.Drawing.Size(106, 23);
             this.buttonAliasesRemove.TabIndex = 0;
@@ -144,16 +151,26 @@
             this.tabPageColors.Location = new System.Drawing.Point(4, 22);
             this.tabPageColors.Name = "tabPageColors";
             this.tabPageColors.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageColors.Size = new System.Drawing.Size(252, 182);
+            this.tabPageColors.Size = new System.Drawing.Size(345, 182);
             this.tabPageColors.TabIndex = 1;
             this.tabPageColors.Text = "Colors";
             this.tabPageColors.UseVisualStyleBackColor = true;
             // 
+            // buttonColorsSave
+            // 
+            this.buttonColorsSave.Location = new System.Drawing.Point(10, 88);
+            this.buttonColorsSave.Name = "buttonColorsSave";
+            this.buttonColorsSave.Size = new System.Drawing.Size(329, 23);
+            this.buttonColorsSave.TabIndex = 7;
+            this.buttonColorsSave.Text = "Save colors";
+            this.buttonColorsSave.UseVisualStyleBackColor = true;
+            this.buttonColorsSave.Click += new System.EventHandler(this.buttonColorsSave_Click);
+            // 
             // buttonColorsTextForeground
             // 
-            this.buttonColorsTextForeground.Location = new System.Drawing.Point(87, 35);
+            this.buttonColorsTextForeground.Location = new System.Drawing.Point(6, 35);
             this.buttonColorsTextForeground.Name = "buttonColorsTextForeground";
-            this.buttonColorsTextForeground.Size = new System.Drawing.Size(78, 23);
+            this.buttonColorsTextForeground.Size = new System.Drawing.Size(75, 23);
             this.buttonColorsTextForeground.TabIndex = 6;
             this.buttonColorsTextForeground.Text = "Text Fore";
             this.buttonColorsTextForeground.UseVisualStyleBackColor = true;
@@ -163,7 +180,7 @@
             // 
             this.buttonColorsButtonBackground.Location = new System.Drawing.Point(87, 6);
             this.buttonColorsButtonBackground.Name = "buttonColorsButtonBackground";
-            this.buttonColorsButtonBackground.Size = new System.Drawing.Size(78, 23);
+            this.buttonColorsButtonBackground.Size = new System.Drawing.Size(75, 23);
             this.buttonColorsButtonBackground.TabIndex = 5;
             this.buttonColorsButtonBackground.Text = "Button Back";
             this.buttonColorsButtonBackground.UseVisualStyleBackColor = true;
@@ -171,7 +188,7 @@
             // 
             // buttonColorsButtonForeground
             // 
-            this.buttonColorsButtonForeground.Location = new System.Drawing.Point(171, 6);
+            this.buttonColorsButtonForeground.Location = new System.Drawing.Point(168, 6);
             this.buttonColorsButtonForeground.Name = "buttonColorsButtonForeground";
             this.buttonColorsButtonForeground.Size = new System.Drawing.Size(75, 23);
             this.buttonColorsButtonForeground.TabIndex = 4;
@@ -181,7 +198,7 @@
             // 
             // buttonColorsTextBackground
             // 
-            this.buttonColorsTextBackground.Location = new System.Drawing.Point(6, 35);
+            this.buttonColorsTextBackground.Location = new System.Drawing.Point(249, 6);
             this.buttonColorsTextBackground.Name = "buttonColorsTextBackground";
             this.buttonColorsTextBackground.Size = new System.Drawing.Size(75, 23);
             this.buttonColorsTextBackground.TabIndex = 3;
@@ -214,7 +231,7 @@
             this.panelColorsDemo.Controls.Add(this.buttonColorsDemo);
             this.panelColorsDemo.Location = new System.Drawing.Point(6, 145);
             this.panelColorsDemo.Name = "panelColorsDemo";
-            this.panelColorsDemo.Size = new System.Drawing.Size(240, 31);
+            this.panelColorsDemo.Size = new System.Drawing.Size(333, 31);
             this.panelColorsDemo.TabIndex = 0;
             // 
             // textBoxColorDemo
@@ -225,7 +242,7 @@
             this.textBoxColorDemo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxColorDemo.Location = new System.Drawing.Point(84, 8);
             this.textBoxColorDemo.Name = "textBoxColorDemo";
-            this.textBoxColorDemo.Size = new System.Drawing.Size(153, 13);
+            this.textBoxColorDemo.Size = new System.Drawing.Size(246, 13);
             this.textBoxColorDemo.TabIndex = 1;
             this.textBoxColorDemo.Text = "Demo Text";
             // 
@@ -241,6 +258,45 @@
             this.buttonColorsDemo.Text = "Settings";
             this.buttonColorsDemo.UseVisualStyleBackColor = true;
             // 
+            // tabPagePath
+            // 
+            this.tabPagePath.Controls.Add(this.labelPathWarning);
+            this.tabPagePath.Controls.Add(this.listBoxPath);
+            this.tabPagePath.Controls.Add(this.buttonPathRemove);
+            this.tabPagePath.Controls.Add(this.buttonPathAdd);
+            this.tabPagePath.Location = new System.Drawing.Point(4, 22);
+            this.tabPagePath.Name = "tabPagePath";
+            this.tabPagePath.Size = new System.Drawing.Size(345, 182);
+            this.tabPagePath.TabIndex = 2;
+            this.tabPagePath.Text = "Path editor";
+            this.tabPagePath.UseVisualStyleBackColor = true;
+            // 
+            // listBoxPath
+            // 
+            this.listBoxPath.FormattingEnabled = true;
+            this.listBoxPath.Location = new System.Drawing.Point(3, 68);
+            this.listBoxPath.Name = "listBoxPath";
+            this.listBoxPath.Size = new System.Drawing.Size(339, 82);
+            this.listBoxPath.TabIndex = 2;
+            // 
+            // buttonPathRemove
+            // 
+            this.buttonPathRemove.Location = new System.Drawing.Point(96, 156);
+            this.buttonPathRemove.Name = "buttonPathRemove";
+            this.buttonPathRemove.Size = new System.Drawing.Size(124, 23);
+            this.buttonPathRemove.TabIndex = 1;
+            this.buttonPathRemove.Text = "Remove selected path";
+            this.buttonPathRemove.UseVisualStyleBackColor = true;
+            // 
+            // buttonPathAdd
+            // 
+            this.buttonPathAdd.Location = new System.Drawing.Point(226, 156);
+            this.buttonPathAdd.Name = "buttonPathAdd";
+            this.buttonPathAdd.Size = new System.Drawing.Size(116, 23);
+            this.buttonPathAdd.TabIndex = 0;
+            this.buttonPathAdd.Text = "Add folder to path";
+            this.buttonPathAdd.UseVisualStyleBackColor = true;
+            // 
             // linkLabelGithub
             // 
             this.linkLabelGithub.AutoSize = true;
@@ -252,15 +308,17 @@
             this.linkLabelGithub.Text = "Github";
             this.linkLabelGithub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGithub_LinkClicked);
             // 
-            // buttonColorsSave
+            // labelPathWarning
             // 
-            this.buttonColorsSave.Location = new System.Drawing.Point(10, 88);
-            this.buttonColorsSave.Name = "buttonColorsSave";
-            this.buttonColorsSave.Size = new System.Drawing.Size(233, 23);
-            this.buttonColorsSave.TabIndex = 7;
-            this.buttonColorsSave.Text = "Save colors";
-            this.buttonColorsSave.UseVisualStyleBackColor = true;
-            this.buttonColorsSave.Click += new System.EventHandler(this.buttonColorsSave_Click);
+            this.labelPathWarning.AutoSize = true;
+            this.labelPathWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelPathWarning.ForeColor = System.Drawing.Color.DarkRed;
+            this.labelPathWarning.Location = new System.Drawing.Point(3, 0);
+            this.labelPathWarning.Name = "labelPathWarning";
+            this.labelPathWarning.Size = new System.Drawing.Size(339, 60);
+            this.labelPathWarning.TabIndex = 3;
+            this.labelPathWarning.Text = "CHANGING YOUR USER PATH CAN BE REALLY\r\nDANGEROUS, PLEASE BE CAREFULL WITH WHAT\r\nY" +
+    "OU ARE DOING HERE. DON\'T BLAME ME IF YOUR\r\nCOMPUTER STOPS WORKING.";
             // 
             // FormSettings
             // 
@@ -268,7 +326,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(377, 261);
             this.ControlBox = false;
             this.Controls.Add(this.linkLabelGithub);
             this.Controls.Add(this.tabControlSettings);
@@ -288,6 +346,8 @@
             this.tabPageColors.PerformLayout();
             this.panelColorsDemo.ResumeLayout(false);
             this.panelColorsDemo.PerformLayout();
+            this.tabPagePath.ResumeLayout(false);
+            this.tabPagePath.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -314,5 +374,10 @@
         private System.Windows.Forms.Button buttonColorsDemo;
         private System.Windows.Forms.ColorDialog colorDialogColors;
         private System.Windows.Forms.Button buttonColorsSave;
+        private System.Windows.Forms.TabPage tabPagePath;
+        private System.Windows.Forms.ListBox listBoxPath;
+        private System.Windows.Forms.Button buttonPathRemove;
+        private System.Windows.Forms.Button buttonPathAdd;
+        private System.Windows.Forms.Label labelPathWarning;
     }
 }
