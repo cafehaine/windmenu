@@ -7,13 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Win32; // for registry reading
 
 namespace windmenu
 {
     public partial class FormSettings : Form
     {
-        static public string systemPath;
         public FormSettings()
         {
             InitializeComponent();
@@ -34,32 +32,22 @@ namespace windmenu
             }
             return output.Substring(0, output.Length - 1);
         }
+
         private void save()
         {
             Program.ini.IniWriteValue("Colors", "list", joinSettings(Program.colors));
             Program.ini.IniWriteValue("Aliases", "list", joinSettings(Program.aliases));
-        }
+        } // function to save aliases and colors into the ini file
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
+        } // exit without saving
 
         private void linkLabelGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/psgarsenal/windmenu");
-        }
-
-        private void buttonAliasesAdd_Click(object sender, EventArgs e)
-        {
-            FormAlias aliasesForm = new FormAlias();
-            aliasesForm.ShowDialog();
-            if (aliasesForm.created)
-            {
-                Program.aliases.Add(aliasesForm.alias + "=\"" + aliasesForm.aliasTarget + "\"");
-                listBoxAliases.Items.Add(aliasesForm.alias + "=\"" + aliasesForm.aliasTarget + "\"");
-            }
-        }
+        } // open da gates
 
         private void FormSettings_Load(object sender, EventArgs e)
         {
@@ -82,20 +70,13 @@ namespace windmenu
                 buttonColorsDemo.ForeColor = ColorTranslator.FromHtml(Program.colors[4]);
             }
             // PATH TAB
-            systemPath = (string)Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment\").GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
+            
             listBoxPath.Items.Clear();
-            listBoxPath.Items.AddRange(systemPath.Split(';'));
-        } // setting the values of some lists
-
-        private void buttonAliasesRemove_Click(object sender, EventArgs e)
-        {
-            if (listBoxAliases.SelectedIndex != -1)
+            foreach (string s in Program.pathList)
             {
-                string toRemove = listBoxAliases.Items[listBoxAliases.SelectedIndex].ToString();
-                listBoxAliases.Items.Remove(toRemove);
-                Program.aliases.Remove(toRemove);
+                listBoxPath.Items.Add(s);
             }
-        }
+        } // setting the values of some lists
 
         #region Color buttons
         private void buttonColorsBackground_Click(object sender, EventArgs e)
@@ -139,12 +120,37 @@ namespace windmenu
         }
         #endregion
 
+        #region Alias tab
+        private void buttonAliasesAdd_Click(object sender, EventArgs e)
+        {
+            FormAlias aliasesForm = new FormAlias();
+            aliasesForm.ShowDialog();
+            if (aliasesForm.created)
+            {
+                Program.aliases.Add(aliasesForm.alias + "=\"" + aliasesForm.aliasTarget + "\"");
+                listBoxAliases.Items.Add(aliasesForm.alias + "=\"" + aliasesForm.aliasTarget + "\"");
+            }
+        } // add an alias to the list
+
+        private void buttonAliasesRemove_Click(object sender, EventArgs e)
+        {
+            if (listBoxAliases.SelectedIndex != -1)
+            {
+                string toRemove = listBoxAliases.Items[listBoxAliases.SelectedIndex].ToString();
+                listBoxAliases.Items.Remove(toRemove);
+                Program.aliases.Remove(toRemove);
+            }
+        } // remove an alias from the list
+        #endregion
+
+        #region Path tab
         private void buttonPathRemove_Click(object sender, EventArgs e)
         {
             if (listBoxPath.SelectedIndex != -1)
             {
                 string toRemove = listBoxPath.Items[listBoxPath.SelectedIndex].ToString();
                 listBoxPath.Items.Remove(toRemove);
+                Program.pathList.Remove(toRemove);
             }
         }
 
@@ -155,12 +161,18 @@ namespace windmenu
             if (pathForm.isSetPath)
             {
                 listBoxPath.Items.Add(pathForm.path);
+                Program.pathList.Add(pathForm.path);
             }
         }
 
         private void buttonPathSave_Click(object sender, EventArgs e)
         {
-
+            DialogResult dialog = MessageBox.Show("This operation is dangerous, are you sure you want to write your changes?", "This operation is dangerous!", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.Yes)
+            {
+                MessageBox.Show(joinSettings(Program.pathList));
+            }
         }
+        #endregion
     }
 }
