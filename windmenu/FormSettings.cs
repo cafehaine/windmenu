@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32; // for registry io (path)
+using System.IO; // to create a reg file
+using System.Diagnostics; // run processes
 
 namespace windmenu
 {
@@ -170,8 +173,52 @@ namespace windmenu
             DialogResult dialog = MessageBox.Show("This operation is dangerous, are you sure you want to write your changes?", "This operation is dangerous!", MessageBoxButtons.YesNo);
             if (dialog == DialogResult.Yes)
             {
-                MessageBox.Show(joinSettings(Program.pathList));
+                string pathOld = (string)Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment\").GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
+                string backupPath = Environment.GetEnvironmentVariable("USERPROFILE") + "\\path.bak";
+                File.WriteAllText(backupPath, pathOld);
+                if (writePath(joinSettings(Program.pathList)))
+                {
+                    MessageBox.Show("You may need to reboot in order to see the path change take effect. Also a backup of your old path was written in \"" + backupPath + ".", "Path written");
+                }
             }
+        }
+
+        private string convertPath(string input)
+        {
+            string output = "";
+            output += BitConverter.ToString(Encoding.ASCII.GetBytes(input)).Replace("-",",00,") + ",00";
+            return output;
+        }
+
+        private bool writePath(string path)
+        {
+            // Create reg file
+            string pathToRegFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".reg";
+            StreamWriter stream = new StreamWriter(pathToRegFile);
+            stream.WriteLine("Windows Registry Editor Version 5.00");
+            stream.WriteLine("[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment]");
+            stream.Write("\"Path\"=hex(2):");
+            stream.Write(convertPath(path));
+            stream.Write("\n");
+            stream.Close();
+            // Write change
+            var psi = new ProcessStartInfo();
+            psi.FileName = "regedit.exe";
+            psi.Arguments = "/S "+ pathToRegFile;
+            psi.Verb = "runas";
+            try
+            {
+                Process p = Process.Start(psi);
+                p.WaitForExit();
+            }
+            catch (Win32Exception ex)
+            {
+                MessageBox.Show("Failed to get required priviledges", "Impossible to write path", MessageBoxButtons.OK);
+                File.Delete(pathToRegFile);
+                return false;
+            }
+            File.Delete(pathToRegFile);
+            return true;
         }
         #endregion
     }

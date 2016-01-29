@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Ini; // Load and save ini files
-using Microsoft.Win32; // for registry reading (path)
+using Microsoft.Win32; // for registry io (path)
 
 namespace windmenu
 {
