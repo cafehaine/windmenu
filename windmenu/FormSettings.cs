@@ -174,11 +174,11 @@ namespace windmenu
             if (dialog == DialogResult.Yes)
             {
                 string pathOld = (string)Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment\").GetValue("PATH", "", RegistryValueOptions.DoNotExpandEnvironmentNames);
-                string backupPath = Environment.GetEnvironmentVariable("USERPROFILE") + "\\path.bak";
-                File.WriteAllText(backupPath, pathOld);
+                string backupPath = Environment.GetEnvironmentVariable("USERPROFILE") + "\\path.reg";
+                createPathReg(pathOld, backupPath);
                 if (writePath(joinSettings(Program.pathList)))
                 {
-                    MessageBox.Show("You may need to reboot in order to see the path change take effect. Also a backup of your old path was written in \"" + backupPath + ".", "Path written");
+                    MessageBox.Show("You may need to reboot in order to see the path change take effect. Also a backup of your old path was written in \"" + backupPath + "\".", "Path written");
                 }
             }
         }
@@ -190,17 +190,22 @@ namespace windmenu
             return output;
         }
 
-        private bool writePath(string path)
+        private string createPathReg(string value, string regPath)
         {
-            // Create reg file
-            string pathToRegFile = Path.GetTempPath() + Guid.NewGuid().ToString() + ".reg";
-            StreamWriter stream = new StreamWriter(pathToRegFile);
+            StreamWriter stream = new StreamWriter(regPath);
             stream.WriteLine("Windows Registry Editor Version 5.00");
             stream.WriteLine("[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment]");
             stream.Write("\"Path\"=hex(2):");
-            stream.Write(convertPath(path));
+            stream.Write(convertPath(value));
             stream.Write("\n");
             stream.Close();
+            return regPath;
+        } // create a reg file to set path from value, and returns the path
+
+        private bool writePath(string path)
+        {
+            // Create reg file
+            string pathToRegFile = createPathReg(path, Path.GetTempPath() + Guid.NewGuid().ToString() + ".reg");
             // Write change
             var psi = new ProcessStartInfo();
             psi.FileName = "regedit.exe";
