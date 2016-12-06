@@ -1,0 +1,9 @@
+C:\Documents\Prog\windmenu\Client\bin\Debug\Client.exe.config
+C:\Documents\Prog\windmenu\Client\bin\Debug\Client.exe
+C:\Documents\Prog\windmenu\Client\bin\Debug\Client.pdb
+C:\Documents\Prog\windmenu\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Documents\Prog\windmenu\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Documents\Prog\windmenu\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Documents\Prog\windmenu\Client\obj\Debug\Client.exe
+C:\Documents\Prog\windmenu\Client\obj\Debug\Client.pdb
+C:\Documents\Prog\windmenu\Client\obj\Debug\Client.MainForm.resources
