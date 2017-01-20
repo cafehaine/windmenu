@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using static System.Environment;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Server
 {
@@ -212,7 +213,7 @@ namespace Server
         }
 
         public static List<KeyValuePair<string,string>> GetBinaries(
-            bool ParseStartmenu, string[] BlackList)
+            bool ParseStartmenu, Regex[] BlackList)
         {
             string[] paths = GetEnvironmentVariable("PATH").Split(';');
             string[] exts = GetEnvironmentVariable("PATHEXT").Split(';');
@@ -225,11 +226,26 @@ namespace Server
                 if (Directory.Exists(path))
                 {
                     foreach (string file in Directory.EnumerateFiles(path))
+                    {
+                        bool matchesExt = false;
                         foreach (string ext in exts)
                             if (file.ToUpper().EndsWith(ext))
-                                output.Add(new KeyValuePair<string, string>(
-                                    Path.GetFileNameWithoutExtension(file),
-                                    file));
+                                matchesExt = true;
+                        if (!matchesExt)
+                            continue;
+
+                        string name = Path.GetFileNameWithoutExtension(file);
+                        bool onBlacklist = false;
+
+                        foreach (Regex rgx in BlackList)
+                            if (rgx.IsMatch(name))
+                                onBlacklist = true;
+
+                        if (!onBlacklist)
+                            output.Add(new KeyValuePair<string, string>(
+                                Path.GetFileNameWithoutExtension(file),
+                                file));
+                    }
                 }
                 else
                 {
@@ -247,12 +263,19 @@ namespace Server
                 links.AddRange(recursivelyListLinks(userSm));
                 links.AddRange(recursivelyListLinks(globlSm));
                 foreach (string link in links)
-                    if (!stringContainsAnyOf(link, BlackList))
-                    {
+                {
+                    string name = Path.GetFileNameWithoutExtension(link);
+                    bool onBlacklist = false;
+
+                    foreach (Regex rgx in BlackList)
+                        if (rgx.IsMatch(name))
+                            onBlacklist = true;
+
+                    if (!onBlacklist)
                         output.Add(new KeyValuePair<string, string>(
                             Path.GetFileNameWithoutExtension(link),
                             lnkUtility.ResolveShortcut(link)));
-                    }
+                }
             }
 
             Console.WriteLine("Done parsing");

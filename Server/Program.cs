@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Server
 {
@@ -52,9 +53,16 @@ namespace Server
 
         static void Main(string[] args)
         {
-            List<KeyValuePair<string,string>> Links = Binaries.GetBinaries(true,
-                new string[] {"uninstall", "help", "manual", "readme",
-                    "read me", "register" });
+            Regex[] blacklist = new Regex[6];
+            string[] regexes = new string[] {".*uninstall.*", ".*help.*",
+                ".*manual.*", ".*read ?me.*", ".*register.*", "\\{.*\\}" };
+
+            for (int i = 0; i < regexes.Length; i++)
+                blacklist[i] = new Regex(regexes[i], RegexOptions.IgnoreCase);
+
+            List<KeyValuePair<string,string>> Links = Binaries.GetBinaries(
+                true, blacklist);
+
             // load blacklist from config file
             Links = Links.Distinct(new linksComparer()).ToList();
             Links.Sort(Comparer<KeyValuePair<string, string>>.Create(

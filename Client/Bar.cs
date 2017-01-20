@@ -190,6 +190,11 @@ namespace Client
 
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            Close();
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
