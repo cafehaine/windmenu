@@ -1,6 +1,6 @@
 # ignore Visual Studio directories
 .vs/
-client/bin/
-client/obj/
-server/bin/
-server/obj/
+Client/bin/
+Client/obj/
+Server/bin/
+Server/obj/
