@@ -9,14 +9,14 @@ namespace Client
 {
     class Bar : Form
     {
-        public enum Position : int
+        public enum Position : byte
         {
             top = 1,
             bottom = 0
         }
 
         #region Variables
-        private SolidBrush barBack;
+        private Color barBack;
         private SolidBrush barFore;
         private SolidBrush selBack;
         private SolidBrush selFore;
@@ -44,7 +44,7 @@ namespace Client
             DoubleBuffered = true; // Reduce flickering on redraw
             TopMost = true; // Draw on top of everything
 
-            barBack = new SolidBrush(NormalBack);
+            barBack = NormalBack;
             barFore = new SolidBrush(NormalFore);
             selBack = new SolidBrush(FocusedBack);
             selFore = new SolidBrush(FocusedFore);
@@ -80,10 +80,7 @@ namespace Client
             serverStream.Read(serverOutput, 0, inSize - 1);
 
             programList = Encoding.UTF8.GetString(serverOutput).Split('|');
-            suggestions = new List<string>(programList.Length);
-
-            foreach (string element in programList)
-                suggestions.Add(element);
+            updateSuggestions();
 
             clientSocket.Close();
         }
@@ -176,7 +173,7 @@ namespace Client
             }
             else if (e.KeyCode == Keys.Right)
             {
-                if (suggIndex < suggestions.Count)
+                if (suggIndex < suggestions.Count - 1)
                 {
                     suggIndex++;
                     Invalidate();
@@ -184,22 +181,28 @@ namespace Client
             }
             else
             {
-                text += KeyboardConverter.KeyCodeToUnicode(e.KeyCode);
-                updateSuggestions();
+                string input = KeyboardConverter.KeyCodeToUnicode(e.KeyCode);
+                if (input != "")
+                {
+                    text += input;
+                    updateSuggestions();
+                }
             }
 
         }
 
         protected override void OnLostFocus(EventArgs e)
         {
-            Close();
+            #if !DEBUG
+                Close();
+            #endif
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics g = e.Graphics;
 
-            g.FillRectangle(barBack, ClientRectangle);
+            g.Clear(barBack);
 
             float RightMost = ClientRectangle.Width;
 
@@ -220,7 +223,7 @@ namespace Client
                 {
                     g.DrawString(sugg, Font, barFore, new PointF(leftPos, 1));
                 }
-                leftPos += size.Width;
+                leftPos += size.Width + 2;
             }
         }
 
@@ -229,13 +232,22 @@ namespace Client
             suggIndex = 0;
             suggestions.Clear();
             int i = 0;
-            while (suggestions.Count < 20 && i < programList.Length)
+            Graphics temp = Graphics.FromHwndInternal(Handle);
+            float xPosition = 0;
+
+            while (xPosition < ClientRectangle.Width * 0.9F && i < programList.Length)
             {
                 string element = programList[i];
                 if (element.ToLower().Contains(text.ToLower()))
+                {
                     suggestions.Add(element);
+                    xPosition += temp.MeasureString(element, Font).Width + 2;
+                }
                 i++;
             }
+            
+            temp.Dispose();
+
             Invalidate();
         }
     }

@@ -95,6 +95,8 @@ namespace Server
                 string output = TreatRequest(
                     Encoding.UTF8.GetString(clientRequest), ref Links);
                 Console.WriteLine("\tServer answer: " + output.Substring(1));
+                Console.WriteLine("Length: " + output.Length);
+                Console.WriteLine("Count: " + Links.Count);
 
                 byte[] outSize = new byte[] { (byte)(output.Length / 256),
                     (byte)(output.Length % 256) };
