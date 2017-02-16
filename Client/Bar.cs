@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.MemoryMappedFiles;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Forms;
@@ -16,6 +17,7 @@ namespace Client
         }
 
         #region Variables
+
         private Color barBack;
         private SolidBrush barFore;
         private SolidBrush selBack;
@@ -24,7 +26,7 @@ namespace Client
         private Position pos;
 
         private int barHeight;
-        private string text = "";
+        private string text = string.Empty;
         private string[] programList;
         private List<string> suggestions;
         private int suggIndex = 0;
@@ -51,38 +53,29 @@ namespace Client
 
             FormBorderStyle = FormBorderStyle.None;
 
-            string data = "hello";
-            TcpClient clientSocket = new TcpClient();
+            // Retreive program list:
 
-            try { clientSocket.Connect("127.0.0.1", 12321); }
-            catch
+            try
             {
-                MessageBox.Show("Server unreachable.");
-                Close();
-                return;
+                MemoryMappedFile mmf = MemoryMappedFile.OpenExisting("windmenu", MemoryMappedFileRights.Read);
+                MemoryMappedViewAccessor va = mmf.CreateViewAccessor(0, 8, MemoryMappedFileAccess.Read);
+                long sizeData;
+                va.Read(0, out sizeData);
+                va.Dispose();
+                va = mmf.CreateViewAccessor(8, sizeData, MemoryMappedFileAccess.Read);
+                byte[] data = new byte[sizeData];
+                va.ReadArray(0, data, 0, (int)sizeData);
+                va.Dispose();
+                mmf.Dispose();
+                
+                programList = Encoding.Unicode.GetString(data).Split('|');
+            }
+            catch (Exception)
+            {
+                throw new Exception("Communication error with the server.\nTry killing the server and starting it again.");
             }
 
-            NetworkStream serverStream = clientSocket.GetStream();
-            byte[] messageSize = new byte[] { (byte)(data.Length / 256), (byte)(data.Length % 256) };
-            byte[] outStream = Encoding.UTF8.GetBytes(data);
-            serverStream.Write(messageSize, 0, 2);
-            serverStream.Write(outStream, 0, outStream.Length);
-            serverStream.Flush();
-
-            byte[] serverMessageSize = new byte[clientSocket.ReceiveBufferSize];
-            serverStream.Read(serverMessageSize, 0, 2);
-
-            int inSize = serverMessageSize[0] * 256 + serverMessageSize[1];
-
-            byte[] serverStatus = new byte[1];
-            serverStream.Read(serverStatus, 0, 1);
-            byte[] serverOutput = new byte[inSize];
-            serverStream.Read(serverOutput, 0, inSize - 1);
-
-            programList = Encoding.UTF8.GetString(serverOutput).Split('|');
-            updateSuggestions();
-
-            clientSocket.Close();
+            suggestions = new List<string>();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -109,6 +102,7 @@ namespace Client
             }
 
             SetBoundsCore(x, y, width, height, BoundsSpecified.All);
+            updateSuggestions();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -123,7 +117,7 @@ namespace Client
                     string data = "run" + suggestions[suggIndex];
                     clientSocket = new TcpClient();
 
-                    try { clientSocket.Connect("127.0.0.1", 12321); }
+                    try { clientSocket.Connect(System.Net.IPAddress.Loopback, 12321); }
                     catch
                     {
                         MessageBox.Show("Server unreachable.");
@@ -131,26 +125,11 @@ namespace Client
                     }
 
                     NetworkStream serverStream = clientSocket.GetStream();
-                    byte[] messageSize = new byte[] { (byte)(data.Length / 256), (byte)(data.Length % 256) };
-                    byte[] outStream = Encoding.UTF8.GetBytes(data);
+                    byte[] outStream = Encoding.Unicode.GetBytes(data);
+                    byte[] messageSize = new byte[] { (byte)(outStream.Length / 256), (byte)(outStream.Length % 256) };
                     serverStream.Write(messageSize, 0, 2);
                     serverStream.Write(outStream, 0, outStream.Length);
                     serverStream.Flush();
-
-                    byte[] serverMessageSize = new byte[clientSocket.ReceiveBufferSize];
-                    serverStream.Read(serverMessageSize, 0, 2);
-
-                    int inSize = serverMessageSize[0] * 256 + serverMessageSize[1];
-
-                    byte[] serverStatus = new byte[1];
-                    serverStream.Read(serverStatus, 0, 1);
-                    byte[] serverOutput = new byte[inSize];
-                    serverStream.Read(serverOutput, 0, inSize - 1);
-
-                    string output = Encoding.UTF8.GetString(serverOutput);
-
-                    if (serverStatus[0] != 6)
-                        MessageBox.Show(output);
 
                     clientSocket.Close();
                 }
@@ -220,9 +199,8 @@ namespace Client
                     g.DrawString(sugg, Font, selFore, new PointF(leftPos, 1));
                 }
                 else
-                {
                     g.DrawString(sugg, Font, barFore, new PointF(leftPos, 1));
-                }
+
                 leftPos += size.Width + 2;
             }
         }
@@ -245,7 +223,7 @@ namespace Client
                 }
                 i++;
             }
-            
+
             temp.Dispose();
 
             Invalidate();

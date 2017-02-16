@@ -1,6 +1,0 @@
-C:\Documents\Prog\windmenu\Server\bin\Debug\Server.exe.config
-C:\Documents\Prog\windmenu\Server\bin\Debug\Server.exe
-C:\Documents\Prog\windmenu\Server\bin\Debug\Server.pdb
-C:\Documents\Prog\windmenu\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
-C:\Documents\Prog\windmenu\Server\obj\Debug\Server.exe
-C:\Documents\Prog\windmenu\Server\obj\Debug\Server.pdb

@@ -35,7 +35,7 @@ namespace Client
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-        {
+{
             #region Argument parsing
             Bar.Position Pos = Bar.Position.top;
             Color NormalBack = Color.Black;
@@ -98,13 +98,20 @@ namespace Client
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+#if !DEBUG
             try
             {
                 Application.Run(new Bar(Pos, NormalBack, NormalFore,
                     FocusedBack, FocusedFore, Font));
             }
-            catch (Exception)
-            { }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message,"windmenu Client");
+            }
+#else
+            Application.Run(new Bar(Pos, NormalBack, NormalFore,
+                FocusedBack, FocusedFore, Font));
+#endif
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.IO.MemoryMappedFiles;
+using System.Windows.Forms;
 
 namespace Server
 {
@@ -26,32 +28,17 @@ namespace Server
             }
         }
 
-        public static string TreatRequest(string request,
+        public static void TreatRequest(string request,
             ref List<KeyValuePair<string,string>> list)
         {
-            string output = string.Empty;
-            if (request.StartsWith("run"))
-            {
-                int index = list.FindIndex(x => x.Key == request.Substring(3));
-                if (index != -1)
-                {
-                    Process.Start(list[index].Value);
-                    output = "\x06";
-                }
-                else
-                    output += "\x15Key missing from list.";
-            }
+            int index = list.FindIndex(x => x.Key == request.Substring(3));
+            if (index != -1)
+                Process.Start(list[index].Value);
             else
-            {
-                output = "\x06";
-                foreach (KeyValuePair<string, string> kvp in list)
-                    output += kvp.Key + "|";
-                output.Substring(0, output.Length - 1);
-            }
-            return output;
+                Console.WriteLine("\tProgram requested was not in the list");
         }
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             Regex[] blacklist = new Regex[6];
             string[] regexes = new string[] {".*uninstall.*", ".*help.*",
@@ -64,9 +51,32 @@ namespace Server
                 true, blacklist);
 
             // load blacklist from config file
+
             Links = Links.Distinct(new linksComparer()).ToList();
             Links.Sort(Comparer<KeyValuePair<string, string>>.Create(
                 (i1, i2) => i1.Key.CompareTo(i2.Key)));
+
+            List<string> LinksNames = new List<string>(Links.Count);
+
+            for (int i = 0; i < Links.Count; i++)
+                LinksNames.Add(Links[i].Key);
+            
+            byte[] toWrite = Encoding.Unicode.GetBytes(string.Join("|", LinksNames));
+
+            MemoryMappedFile mmf;
+            try
+            {
+                mmf = MemoryMappedFile.CreateNew("windmenu", 8 + toWrite.Length);
+                MemoryMappedViewAccessor va = mmf.CreateViewAccessor();
+                va.Write(0, toWrite.LongLength);
+                va.WriteArray(8, toWrite, 0, toWrite.Length);
+                va.Dispose();
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("windmenu Server seems to already be running.", "windmenu Server");
+                return 1;
+            }
 
             TcpListener serverSocket = new TcpListener(IPAddress.Loopback,
                 12321);
@@ -83,31 +93,25 @@ namespace Server
 
                 byte[] clientRequestSize =
                     new byte[clientSocket.ReceiveBufferSize];
-                stream.Read(clientRequestSize, 0, 2);
 
                 int inSize = clientRequestSize[0] * 256 + clientRequestSize[1];
 
                 byte[] clientRequest = new byte[inSize];
                 stream.Read(clientRequest, 0, inSize);
+                string data = Encoding.Unicode.GetString(clientRequest);
 
-                Console.WriteLine("\tClient request: " +
-                    Encoding.UTF8.GetString(clientRequest));
-                string output = TreatRequest(
-                    Encoding.UTF8.GetString(clientRequest), ref Links);
-                Console.WriteLine("\tServer answer: " + output.Substring(1));
-                Console.WriteLine("Length: " + output.Length);
-                Console.WriteLine("Count: " + Links.Count);
-
-                byte[] outSize = new byte[] { (byte)(output.Length / 256),
-                    (byte)(output.Length % 256) };
-                byte[] sendBytes = Encoding.UTF8.GetBytes(output);
-                stream.Write(outSize, 0, 2);
-                stream.Write(sendBytes, 0, sendBytes.Length);
+                Console.WriteLine("\tClient request: " + data);
+                if (data.StartsWith("run"))
+                    TreatRequest(Encoding.Unicode.GetString(clientRequest), ref Links);
+                else
+                    Console.WriteLine("\tRequest was invalid");
 
                 Console.WriteLine("Connexion closed");
                 clientSocket.Close();
             }
             serverSocket.Stop();
+            mmf.Dispose();
+            return 0;
         }
     }
 }
