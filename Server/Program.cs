@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO.MemoryMappedFiles;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Server
 {
@@ -38,8 +39,15 @@ namespace Server
                 Console.WriteLine("\tProgram requested was not in the list");
         }
 
+        [DllImport("kernel32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         static int Main(string[] args)
         {
+#if DEBUG
+            AllocConsole();
+#endif
             Regex[] blacklist = new Regex[6];
             string[] regexes = new string[] {".*uninstall.*", ".*help.*",
                 ".*manual.*", ".*read ?me.*", ".*register.*", "\\{.*\\}" };
@@ -91,11 +99,9 @@ namespace Server
                 Console.WriteLine("Accepted client");
                 NetworkStream stream = clientSocket.GetStream();
 
-                byte[] clientRequestSize =
-                    new byte[clientSocket.ReceiveBufferSize];
-
+                byte[] clientRequestSize = new byte[2];
+                stream.Read(clientRequestSize, 0, 2);
                 int inSize = clientRequestSize[0] * 256 + clientRequestSize[1];
-
                 byte[] clientRequest = new byte[inSize];
                 stream.Read(clientRequest, 0, inSize);
                 string data = Encoding.Unicode.GetString(clientRequest);

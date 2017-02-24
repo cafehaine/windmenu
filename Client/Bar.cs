@@ -129,7 +129,6 @@ namespace Client
                     byte[] messageSize = new byte[] { (byte)(outStream.Length / 256), (byte)(outStream.Length % 256) };
                     serverStream.Write(messageSize, 0, 2);
                     serverStream.Write(outStream, 0, outStream.Length);
-                    serverStream.Flush();
 
                     clientSocket.Close();
                 }
