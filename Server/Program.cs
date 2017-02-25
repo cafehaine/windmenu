@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.IO.MemoryMappedFiles;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using static Server.Settings;
 
 namespace Server
 {
@@ -48,17 +49,15 @@ namespace Server
 #if DEBUG
             AllocConsole();
 #endif
-            Regex[] blacklist = new Regex[6];
-            string[] regexes = new string[] {".*uninstall.*", ".*help.*",
-                ".*manual.*", ".*read ?me.*", ".*register.*", "\\{.*\\}" };
+            LoadSettings();
+            Regex[] blacklist = new Regex[Regexes.Length];
 
-            for (int i = 0; i < regexes.Length; i++)
-                blacklist[i] = new Regex(regexes[i], RegexOptions.IgnoreCase);
+            for (int i = 0; i < Regexes.Length; i++)
+                blacklist[i] = new Regex(Regexes[i], RegexIgnoreCase ?
+                    RegexOptions.IgnoreCase : RegexOptions.None);
 
             List<KeyValuePair<string,string>> Links = Binaries.GetBinaries(
-                true, blacklist);
-
-            // load blacklist from config file
+                ParseStartMenu, blacklist);
 
             Links = Links.Distinct(new linksComparer()).ToList();
             Links.Sort(Comparer<KeyValuePair<string, string>>.Create(
@@ -69,12 +68,14 @@ namespace Server
             for (int i = 0; i < Links.Count; i++)
                 LinksNames.Add(Links[i].Key);
             
-            byte[] toWrite = Encoding.Unicode.GetBytes(string.Join("|", LinksNames));
+            byte[] toWrite = Encoding.Unicode.GetBytes(string.Join("|",
+                LinksNames));
 
             MemoryMappedFile mmf;
             try
             {
-                mmf = MemoryMappedFile.CreateNew("windmenu", 8 + toWrite.Length);
+                mmf = MemoryMappedFile.CreateNew("windmenu",
+                    8 + toWrite.Length);
                 MemoryMappedViewAccessor va = mmf.CreateViewAccessor();
                 va.Write(0, toWrite.LongLength);
                 va.WriteArray(8, toWrite, 0, toWrite.Length);
@@ -82,7 +83,8 @@ namespace Server
             }
             catch(Exception)
             {
-                MessageBox.Show("windmenu Server seems to already be running.", "windmenu Server");
+                MessageBox.Show("windmenu Server seems to already be running.",
+                    "windmenu Server");
                 return 1;
             }
 
@@ -108,7 +110,8 @@ namespace Server
 
                 Console.WriteLine("\tClient request: " + data);
                 if (data.StartsWith("run"))
-                    TreatRequest(Encoding.Unicode.GetString(clientRequest), ref Links);
+                    TreatRequest(Encoding.Unicode.GetString(clientRequest),
+                        ref Links);
                 else
                     Console.WriteLine("\tRequest was invalid");
 

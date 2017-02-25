@@ -1,29 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using static System.Environment;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace Server
 {
     static class Binaries
     {
-        private static bool stringContainsAnyOf(string str,
-            IEnumerable<string> list)
-        {
-            foreach (string word in list)
-                if (str.ToLower().Contains(word.ToLower()))
-                    return true;
-            return false;
-        }
-
         private static List<string> recursivelyListLinks(string path)
         {
             List<string> output = new List<string>();
             // Without this we will get exceptions in non-english installations
-            // of windows
+            // of windows (yay microsoft.)
             try
             {
                 output.AddRange(Directory.EnumerateFiles(path, "*.lnk"));
@@ -36,6 +25,12 @@ namespace Server
             return output;
         }
 
+        /// <summary>
+        /// Return a list of all the binaries and links.
+        /// </summary>
+        /// <param name="ParseStartmenu">Should we crawl the start menu</param>
+        /// <param name="BlackList">Array of regexes</param>
+        /// <returns></returns>
         public static List<KeyValuePair<string,string>> GetBinaries(
             bool ParseStartmenu, Regex[] BlackList)
         {
@@ -73,7 +68,7 @@ namespace Server
                 }
                 else
                 {
-                    //Console.WriteLine("Path is invalid {" + path + "}");
+                    Console.WriteLine("Path is invalid {" + path + "}");
                 }
             }
 
