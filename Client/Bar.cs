@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO.MemoryMappedFiles;
 using System.Net.Sockets;
@@ -30,6 +31,7 @@ namespace Client
         private string[] programList;
         private List<string> suggestions;
         private int suggIndex = 0;
+        private Point oldMousePos;
 
         #endregion
 
@@ -52,6 +54,7 @@ namespace Client
             selFore = new SolidBrush(FocusedFore);
 
             FormBorderStyle = FormBorderStyle.None;
+            ShowInTaskbar = false;
 
             // Retreive program list:
 
@@ -76,6 +79,16 @@ namespace Client
             }
 
             suggestions = new List<string>();
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -103,6 +116,18 @@ namespace Client
 
             SetBoundsCore(x, y, width, height, BoundsSpecified.All);
             updateSuggestions();
+            oldMousePos = Cursor.Position;
+            Cursor = new Cursor(Cursor.Current.Handle);
+            Cursor.Position = new Point(ClientRectangle.Width / 10,
+                ClientRectangle.Height);
+            Cursor.Clip = new Rectangle(Location, Size);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Cursor.Clip = new Rectangle();
+            Cursor.Position = oldMousePos;
+            base.OnClosing(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
