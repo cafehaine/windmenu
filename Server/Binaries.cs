@@ -75,9 +75,10 @@ namespace Server
             if (ParseStartmenu)
             {
                 Console.WriteLine("Parsing start menus");
-                string userSm = GetFolderPath(SpecialFolder.ApplicationData) +
-                    @"\Microsoft\Windows\Start Menu";
-                string globlSm = @"C:\ProgramData\Microsoft\Windows\Start Menu";
+                string userSm = GetFolderPath(SpecialFolder.StartMenu);
+                string globlSm = GetFolderPath(SpecialFolder.CommonStartMenu);
+
+
                 List<string> links = new List<string>();
                 links.AddRange(recursivelyListLinks(userSm));
                 links.AddRange(recursivelyListLinks(globlSm));
@@ -94,6 +95,8 @@ namespace Server
                         output.Add(new KeyValuePair<string, string>(
                             Path.GetFileNameWithoutExtension(link), link));
                 }
+                output.AddRange(
+                    UAHelper.GetApplicationList());
             }
 
             Console.WriteLine("Done parsing");

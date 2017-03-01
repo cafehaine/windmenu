@@ -10,6 +10,7 @@ using System.IO.MemoryMappedFiles;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using static Server.Settings;
+using System.IO;
 
 namespace Server
 {
@@ -35,7 +36,12 @@ namespace Server
         {
             int index = list.FindIndex(x => x.Key == request.Substring(3));
             if (index != -1)
-                Process.Start(list[index].Value);
+            {
+                if (File.Exists(list[index].Value))
+                    Process.Start(list[index].Value);
+                else
+                    UAHelper.RunApplication(list[index].Value);
+            }
             else
                 Console.WriteLine("\tProgram requested was not in the list");
         }
