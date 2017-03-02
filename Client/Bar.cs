@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -229,6 +230,32 @@ namespace Client
             }
         }
 
+        private class comparer : IComparer
+        {
+            string input;
+
+            public comparer(string Input)
+            { input = Input; }
+
+            int IComparer.Compare(object a, object b)
+            {
+                string x = (string)a;
+                string y = (string)b;
+                if (x == y)
+                    return 0;
+                bool xStarts = x.StartsWith(input, StringComparison.OrdinalIgnoreCase);
+                bool yStarts = y.StartsWith(input, StringComparison.OrdinalIgnoreCase);
+                if (xStarts ^ yStarts)
+                {
+                    if (xStarts)
+                        return -1;
+                    return 1;
+                }
+                else
+                    return string.Compare(x, y, true);
+            }
+        }
+
         private void updateSuggestions()
         {
             suggIndex = 0;
@@ -236,6 +263,8 @@ namespace Client
             int i = 0;
             Graphics temp = Graphics.FromHwndInternal(Handle);
             float xPosition = 0;
+
+            Array.Sort(programList, new comparer(text));
 
             while (xPosition < ClientRectangle.Width * 0.9F && i < programList.Length)
             {
