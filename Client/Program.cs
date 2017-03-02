@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,20 @@ namespace Client
 {
     static class Program
     {
+        /// <summary>
+        /// Should return the accent color used in modernUI Applications
+        /// </summary>
+        /// <returns></returns>
+        private static  Color getModernAccent()
+        {
+            int color = (int)Registry.GetValue(
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM",
+                "ColorizationColor", 0);
+            if (color == 0)
+                return Color.Red;
+            return Color.FromArgb(color);
+        }
+
         private static int hexToDec(char x)
         {
             if (x >= 48 && x <= 57)
@@ -40,7 +55,8 @@ namespace Client
             Bar.Position Pos = Bar.Position.top;
             Color NormalBack = Color.Black;
             Color NormalFore = Color.White;
-            Color FocusedBack = Color.Red;
+            Color FocusedBack = getModernAccent();
+            ;
             Color FocusedFore = Color.White;
             Font Font = new Font("Courier New", 14);
 

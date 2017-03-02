@@ -122,12 +122,14 @@ namespace Client
             Cursor.Position = new Point(ClientRectangle.Width / 10,
                 ClientRectangle.Height);
             Cursor.Clip = new Rectangle(Location, Size);
+            Cursor.Hide();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             Cursor.Clip = new Rectangle();
             Cursor.Position = oldMousePos;
+            Cursor.Show();
             base.OnClosing(e);
         }
 
