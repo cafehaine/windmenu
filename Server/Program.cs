@@ -38,7 +38,14 @@ namespace Server
             if (index != -1)
             {
                 if (File.Exists(list[index].Value))
-                    Process.Start(list[index].Value);
+                {
+                    if (DAHelper.IsCommandLine(list[index].Value))
+                    {
+                        Process.Start("cmd", "/c \"" + list[index].Value +"&&pause\"");
+                    }
+                    else
+                        Process.Start(list[index].Value);
+                }
                 else
                     UAHelper.RunApplication(list[index].Value);
             }
