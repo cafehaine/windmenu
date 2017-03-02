@@ -41,7 +41,7 @@ namespace Server
                 {
                     if (DAHelper.IsCommandLine(list[index].Value))
                     {
-                        Process.Start("cmd", "/c \"" + list[index].Value +"&&pause\"");
+                        Process.Start("cmd", "/c \"" + list[index].Value +"||pause\"");
                     }
                     else
                         Process.Start(list[index].Value);
