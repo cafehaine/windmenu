@@ -33,6 +33,7 @@ namespace Client
         private List<string> suggestions;
         private int suggIndex = 0;
         private Point oldMousePos;
+        private string lastSuggested = string.Empty;
 
         #endregion
 
@@ -139,10 +140,16 @@ namespace Client
                 Close();
             else if (e.KeyCode == Keys.Enter)
             {
-                if (suggestions.Count > 0)
+                if (suggestions.Count > 0 || text.StartsWith(lastSuggested,
+                    StringComparison.OrdinalIgnoreCase))
                 {
                     TcpClient clientSocket;
-                    string data = "run" + suggestions[suggIndex];
+                    string data;
+                    if (suggestions.Count > 0)
+                        data = "run" + suggestions[suggIndex];
+                    else
+                        data = "run" + lastSuggested + "|" +
+                            text.Substring(lastSuggested.Length + 1);
                     clientSocket = new TcpClient();
 
                     try { clientSocket.Connect(System.Net.IPAddress.Loopback, 12321); }
@@ -154,7 +161,10 @@ namespace Client
 
                     NetworkStream serverStream = clientSocket.GetStream();
                     byte[] outStream = Encoding.Unicode.GetBytes(data);
-                    byte[] messageSize = new byte[] { (byte)(outStream.Length / 256), (byte)(outStream.Length % 256) };
+                    byte[] messageSize = new byte[] {
+                        (byte)(outStream.Length / 256),
+                        (byte)(outStream.Length % 256) };
+
                     serverStream.Write(messageSize, 0, 2);
                     serverStream.Write(outStream, 0, outStream.Length);
 
@@ -185,6 +195,11 @@ namespace Client
                     Invalidate();
                 }
             }
+            else if (e.KeyCode == Keys.Tab)
+            {
+                text = suggestions[suggIndex];
+                updateSuggestions();
+            }
             else
             {
                 string input = KeyboardConverter.KeyCodeToUnicode(e.KeyCode);
@@ -212,7 +227,11 @@ namespace Client
 
             float RightMost = ClientRectangle.Width;
 
-            g.DrawString(text, Font, barFore, new RectangleF(1, 1, ClientRectangle.Width / 10, ClientRectangle.Height - 2));
+            SizeF textSize = g.MeasureString(text, Font);
+            if (textSize.Width < ClientRectangle.Width / 10)
+                g.DrawString(text, Font, barFore, new RectangleF(1, 1, ClientRectangle.Width / 10, ClientRectangle.Height - 2));
+            else
+                g.DrawString(text, Font, barFore, new RectangleF(ClientRectangle.Width / 10 - textSize.Width, 1, textSize.Width, ClientRectangle.Height - 2));
 
             float leftPos = ClientRectangle.Width / 10 + 2;
 
@@ -260,6 +279,9 @@ namespace Client
 
         private void updateSuggestions()
         {
+            if (suggestions.Count != 0)
+                lastSuggested = suggestions[suggIndex];
+
             suggIndex = 0;
             suggestions.Clear();
             int i = 0;

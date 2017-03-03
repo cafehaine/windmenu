@@ -34,17 +34,28 @@ namespace Server
         public static void TreatRequest(string request,
             ref List<KeyValuePair<string,string>> list)
         {
-            int index = list.FindIndex(x => x.Key == request.Substring(3));
+            string rq = string.Empty;
+            string args = string.Empty;
+            if (request.Contains('|'))
+            {
+                string[] temp = request.Substring(3).Split(new char[] { '|' },
+                    2);
+                rq = temp[0];
+                args = temp[1];
+            }
+            else
+                rq = request.Substring(3);
+            int index = list.FindIndex(x => x.Key == rq);
             if (index != -1)
             {
                 if (File.Exists(list[index].Value))
                 {
                     if (DAHelper.IsCommandLine(list[index].Value))
                     {
-                        Process.Start("cmd", "/c \"" + list[index].Value +"||pause\"");
+                        Process.Start("cmd", "/c \"" + list[index].Value + " " + args +"||pause\"");
                     }
                     else
-                        Process.Start(list[index].Value);
+                        Process.Start(list[index].Value, args);
                 }
                 else
                     UAHelper.RunApplication(list[index].Value);
