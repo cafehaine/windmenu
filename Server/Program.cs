@@ -64,14 +64,18 @@ namespace Server
                 Console.WriteLine("\tProgram requested was not in the list");
         }
 
-        [DllImport("kernel32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
+        private static class NativeMethods
+        {
+            [DllImport("kernel32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool AllocConsole();
+        }
 
+        [STAThread]
         static int Main(string[] args)
         {
 #if DEBUG
-            AllocConsole();
+            NativeMethods.AllocConsole();
 #endif
             LoadSettings();
             Regex[] blacklist = new Regex[Regexes.Length];

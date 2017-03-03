@@ -59,7 +59,7 @@ namespace Client
             Color NormalBack = Color.Black;
             Color NormalFore = Color.White;
             Color FocusedBack = getModernAccent();
-            ;
+
             Color FocusedFore = Color.White;
             Font Font = new Font("Courier New", 14);
 

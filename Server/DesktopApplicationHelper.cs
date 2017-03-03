@@ -40,13 +40,16 @@ namespace Server
             ExeType = 0x000002000
         }
 
-        [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
+        private static class NativeMethods
+        {
+            [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+            public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
+        }
 
         public static bool IsCommandLine(string path)
         {
             SHFILEINFO data = new SHFILEINFO();
-            IntPtr dword = SHGetFileInfo(path, 0, ref data, 0, 0x000002000);
+            IntPtr dword = NativeMethods.SHGetFileInfo(path, 0, ref data, 0, 0x000002000);
             int loword = unchecked((short)(long)dword);
             int hiword = unchecked((short)((long)dword >> 16));
 

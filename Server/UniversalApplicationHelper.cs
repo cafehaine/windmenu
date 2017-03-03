@@ -73,15 +73,13 @@ namespace Server
                     if (subKey.StartsWith("AppX"))
                     {
                         string appID = string.Empty;
-                        //TODO: check if null instead of try/catch
-                        //TODO: use using or dispose opened keys
                         try
                         {
                             appID = (string)key.OpenSubKey(subKey).
                                 OpenSubKey("Application").
                                 GetValue("AppUserModelID", string.Empty);
                         }
-                        catch (Exception){}
+                        catch (Exception){ continue; }
                         if (appID != string.Empty)
                         {
                             Match matches = appNameRegex.Match(appID);

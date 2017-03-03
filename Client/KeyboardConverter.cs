@@ -11,7 +11,8 @@ namespace Client
         static public string KeyCodeToUnicode(Keys key)
         {
             byte[] keyboardState = new byte[255];
-            bool keyboardStateStatus = GetKeyboardState(keyboardState);
+            bool keyboardStateStatus =
+                NativeMethods.GetKeyboardState(keyboardState);
 
             if (!keyboardStateStatus)
             {
@@ -19,25 +20,29 @@ namespace Client
             }
 
             uint virtualKeyCode = (uint)key;
-            uint scanCode = MapVirtualKey(virtualKeyCode, 0);
-            IntPtr inputLocaleIdentifier = GetKeyboardLayout(0);
+            uint scanCode = NativeMethods.MapVirtualKey(virtualKeyCode, 0);
+            IntPtr inputLocaleIdentifier = NativeMethods.GetKeyboardLayout(0);
 
             StringBuilder result = new StringBuilder();
-            ToUnicodeEx(virtualKeyCode, scanCode, keyboardState, result, 5, 0, inputLocaleIdentifier);
+            NativeMethods.ToUnicodeEx(virtualKeyCode, scanCode, keyboardState,
+                result, 5, 0, inputLocaleIdentifier);
 
             return result.ToString();
         }
 
-        [DllImport("user32.dll")]
-        static extern bool GetKeyboardState(byte[] lpKeyState);
+        private static class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern bool GetKeyboardState(byte[] lpKeyState);
 
-        [DllImport("user32.dll")]
-        static extern uint MapVirtualKey(uint uCode, uint uMapType);
+            [DllImport("user32.dll")]
+            public static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
-        [DllImport("user32.dll")]
-        static extern IntPtr GetKeyboardLayout(uint idThread);
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetKeyboardLayout(uint idThread);
 
-        [DllImport("user32.dll")]
-        static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
+            [DllImport("user32.dll")]
+            public static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
+        }
     }
 }
