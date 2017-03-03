@@ -124,6 +124,8 @@ namespace Client
                 ClientRectangle.Height);
             Cursor.Clip = new Rectangle(Location, Size);
             Cursor.Hide();
+            BringToFront();
+            Activate();
         }
 
         protected override void OnClosing(CancelEventArgs e)
