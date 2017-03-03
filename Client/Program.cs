@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -50,7 +51,9 @@ namespace Client
         /// </summary>
         [STAThread]
         static void Main(string[] args)
-{
+        {
+            if (Process.GetProcessesByName("windmenu-client").Length != 0)
+                return;            
             #region Argument parsing
             Bar.Position Pos = Bar.Position.top;
             Color NormalBack = Color.Black;
