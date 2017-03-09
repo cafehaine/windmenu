@@ -22,6 +22,11 @@ namespace Client
             return Color.FromArgb(color);
         }
 
+        /// <summary>
+        /// Convert an hex char to decimal
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
         private static int hexToDec(char x)
         {
             if (x >= 48 && x <= 57)
@@ -52,8 +57,31 @@ namespace Client
         [STAThread]
         static void Main(string[] args)
         {
-            if (Process.GetProcessesByName("windmenu-client").Length != 0)
-                return;            
+            if (Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "test", string.Empty) == null)
+            {
+                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\",
+                    "", "");
+                Registry.SetValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu\", "",
+                    "");
+            }
+            else
+            {
+                int pid = (int)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "clientid", -1);
+                if (pid != -1)
+                {
+                    string processName = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "clientname", string.Empty);
+                    Process[] procs = Process.GetProcessesByName(processName);
+                    foreach (Process proc in procs)
+                        if (proc.Id == pid)
+                            proc.Kill();
+                }
+            }
+            Process current = Process.GetCurrentProcess();
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "clientid", current.Id);
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "clientname", current.ProcessName);
+            current.Dispose();
+
             #region Argument parsing
             Bar.Position Pos = Bar.Position.top;
             Color NormalBack = Color.Black;

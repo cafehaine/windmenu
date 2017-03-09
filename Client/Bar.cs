@@ -32,7 +32,6 @@ namespace Client
         private string[] programList;
         private List<string> suggestions;
         private int suggIndex = 0;
-        private Point oldMousePos;
         private string lastSuggested = string.Empty;
 
         #endregion
@@ -44,7 +43,13 @@ namespace Client
             BackColor = NormalBack;
             ForeColor = NormalFore;
             this.Font = Font;
+
+            // Make windmenu appear on focused screen
             output = Screen.PrimaryScreen;
+            foreach (Screen scr in Screen.AllScreens)
+                if (scr.Bounds.Contains(Cursor.Position))
+                    output = scr;
+
             pos = Pos;
 
             DoubleBuffered = true; // Reduce flickering on redraw
@@ -72,7 +77,7 @@ namespace Client
                 va.ReadArray(0, data, 0, (int)sizeData);
                 va.Dispose();
                 mmf.Dispose();
-                
+
                 programList = Encoding.Unicode.GetString(data).Split('|');
             }
             catch (Exception)
@@ -118,21 +123,12 @@ namespace Client
 
             SetBoundsCore(x, y, width, height, BoundsSpecified.All);
             updateSuggestions();
-            oldMousePos = Cursor.Position;
-            Cursor = new Cursor(Cursor.Current.Handle);
-            Cursor.Position = new Point(ClientRectangle.Width / 10,
-                ClientRectangle.Height);
-            Cursor.Clip = new Rectangle(Location, Size);
-            Cursor.Hide();
             BringToFront();
             Activate();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            Cursor.Clip = new Rectangle();
-            Cursor.Position = oldMousePos;
-            Cursor.Show();
             base.OnClosing(e);
         }
 

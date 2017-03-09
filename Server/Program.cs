@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using static Server.Settings;
 using System.IO;
+using Microsoft.Win32;
 
 namespace Server
 {
@@ -74,6 +75,31 @@ namespace Server
         [STAThread]
         static int Main(string[] args)
         {
+            if (Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "test", string.Empty) == null)
+            {
+                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\",
+                    "", "");
+                Registry.SetValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu\", "",
+                    "");
+            }
+            else
+            {
+                int pid = (int)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "serverid", -1);
+                if (pid != -1)
+                {
+                    string processName = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "servername", string.Empty);
+                    Process[] procs = Process.GetProcessesByName(processName);
+                    foreach (Process proc in procs)
+                        if (proc.Id == pid)
+                            proc.Kill();
+                }
+            }
+            Process current = Process.GetCurrentProcess();
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "serverid", current.Id);
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "servername", current.ProcessName);
+            current.Dispose();
+
 #if DEBUG
             NativeMethods.AllocConsole();
 #endif
@@ -95,7 +121,7 @@ namespace Server
 
             for (int i = 0; i < Links.Count; i++)
                 LinksNames.Add(Links[i].Key);
-            
+
             byte[] toWrite = Encoding.Unicode.GetBytes(string.Join("|",
                 LinksNames));
 
