@@ -33,6 +33,7 @@ namespace Client
         private List<string> suggestions;
         private int suggIndex = 0;
         private string lastSuggested = string.Empty;
+        private Point oldMousePos;
 
         #endregion
 
@@ -123,12 +124,21 @@ namespace Client
 
             SetBoundsCore(x, y, width, height, BoundsSpecified.All);
             updateSuggestions();
+            oldMousePos = Cursor.Position;
+            Cursor = new Cursor(Cursor.Current.Handle);
+            Cursor.Position = new Point(ClientRectangle.Width / 10,
+            ClientRectangle.Height);
+            Cursor.Clip = new Rectangle(Location, Size);
+            Cursor.Hide();
             BringToFront();
             Activate();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            Cursor.Clip = new Rectangle();
+            Cursor.Position = oldMousePos;
+            Cursor.Show();
             base.OnClosing(e);
         }
 
