@@ -43,6 +43,11 @@ namespace Server
         private static Regex appNameRegex =
             new Regex(@"(.+\.)+([a-zA-Z]*)_.*!.*");
 
+        public static bool IsApp(string app)
+        {
+            return appNameRegex.IsMatch(app);
+        }
+
         private static string prettifyName(string name)
         {
             StringBuilder strBldr = new StringBuilder(name.Length * 2);

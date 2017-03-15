@@ -53,13 +53,16 @@ namespace Server
                 {
                     if (DAHelper.IsCommandLine(list[index].Value))
                     {
-                        Process.Start("cmd", "/c \"" + list[index].Value + " " + args +"||pause\"");
+                        Process.Start("cmd", "/c \"" + list[index].Value + " "
+                            + args + "||pause\"");
                     }
                     else
                         Process.Start(list[index].Value, args);
                 }
-                else
+                else if (UAHelper.IsApp(list[index].Value))
                     UAHelper.RunApplication(list[index].Value);
+                else
+                    Console.WriteLine("\tProgram requested was missing.");
             }
             else
                 Console.WriteLine("\tProgram requested was not in the list");
