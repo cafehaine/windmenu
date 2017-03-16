@@ -78,7 +78,9 @@ namespace Server
         [STAThread]
         static int Main(string[] args)
         {
-            if (Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "test", string.Empty) == null)
+            if (Registry.GetValue(
+                @"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "test",
+                string.Empty) == null)
             {
                 Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\",
                     "", "");
@@ -88,10 +90,14 @@ namespace Server
             }
             else
             {
-                int pid = (int)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "serverid", -1);
+                int pid = (int)Registry.GetValue(
+                    @"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu",
+                    "serverid", -1);
                 if (pid != -1)
                 {
-                    string processName = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "servername", string.Empty);
+                    string processName = (string)Registry.GetValue(
+                        @"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu",
+                        "servername", string.Empty);
                     Process[] procs = Process.GetProcessesByName(processName);
                     foreach (Process proc in procs)
                         if (proc.Id == pid)
@@ -99,8 +105,10 @@ namespace Server
                 }
             }
             Process current = Process.GetCurrentProcess();
-            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "serverid", current.Id);
-            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu", "servername", current.ProcessName);
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu",
+                "serverid", current.Id);
+            Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\CafeHaine\Windmenu",
+                "servername", current.ProcessName);
             current.Dispose();
 
 #if DEBUG
