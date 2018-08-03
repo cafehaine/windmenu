@@ -1,3 +1,4 @@
+# Archived since screw Windows.
 # windmenu
 ![Icon](https://raw.githubusercontent.com/psgarsenal/windmenu/master/icon.png)
 
